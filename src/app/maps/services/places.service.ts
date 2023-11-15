@@ -34,6 +34,14 @@ export class PlacesService {
   }
 
   getPlacesByQuery(query: string = '') {
+    if (query.length === 0) {
+      this.isLoadingPlaces = false;
+      this.places = [];
+      return;
+    }
+
+    if (!this.userLocation) throw Error('No hay userLocation');
+
     this.isLoadingPlaces = true;
 
     this.placesApi
@@ -41,7 +49,6 @@ export class PlacesService {
         `/${query}.json?access_token=pk.eyJ1IjoiZGFyaWVsLTk4IiwiYSI6ImNsb3l2MjJhbjA3bWQyam1zaXQybHczbHcifQ.1hMRESvsXsXUux3BWqFO6A`
       )
       .subscribe((resp) => {
-        console.log(resp.features);
         this.isLoadingPlaces = false;
         this.places = resp.features;
       });
