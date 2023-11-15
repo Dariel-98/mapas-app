@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Feature, PlacesResponse } from '../interfaces/places';
+import { PlacesApiClient } from '../api';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,7 @@ export class PlacesService {
   get isUserLocationReady(): boolean {
     return !!this.userLocation;
   }
-  constructor(private http: HttpClient) {
+  constructor(private placesApi: PlacesApiClient) {
     this.getUserLocation();
   }
 
@@ -36,9 +36,9 @@ export class PlacesService {
   getPlacesByQuery(query: string = '') {
     this.isLoadingPlaces = true;
 
-    this.http
+    this.placesApi
       .get<PlacesResponse>(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?country=mx&language=es&access_token=pk.eyJ1IjoiZGFyaWVsLTk4IiwiYSI6ImNsb3l2MjJhbjA3bWQyam1zaXQybHczbHcifQ.1hMRESvsXsXUux3BWqFO6A`
+        `/${query}.json?access_token=pk.eyJ1IjoiZGFyaWVsLTk4IiwiYSI6ImNsb3l2MjJhbjA3bWQyam1zaXQybHczbHcifQ.1hMRESvsXsXUux3BWqFO6A`
       )
       .subscribe((resp) => {
         console.log(resp.features);
