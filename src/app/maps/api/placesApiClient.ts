@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHandler, HttpParams } from '@angular/common/http';
+import { environment } from 'src/environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
@@ -11,12 +12,27 @@ export class PlacesApiClient extends HttpClient {
     super(handler);
   }
 
-  public override get<T>(url: string) {
+  public override get<T>(
+    url: string,
+    options: {
+      params?:
+        | HttpParams
+        | {
+            [param: string]:
+              | string
+              | number
+              | boolean
+              | ReadonlyArray<string | number | boolean>;
+          };
+    }
+  ) {
     url = this.baseUrl + url;
     return super.get<T>(url, {
       params: {
         country: 'mx',
         language: 'es',
+        access_token: environment.apiKey,
+        ...options.params,
       },
     });
   }

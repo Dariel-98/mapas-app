@@ -50,7 +50,11 @@ export class PlacesService {
 
     this.placesApi
       .get<PlacesResponse>(
-        `/${query}.json?access_token=pk.eyJ1IjoiZGFyaWVsLTk4IiwiYSI6ImNsb3l2MjJhbjA3bWQyam1zaXQybHczbHcifQ.1hMRESvsXsXUux3BWqFO6A`
+        `/${query}.json`
+        //   params: {
+        //     proximity: this.userLocation.join(','),
+        //   },
+        // }
       )
       .subscribe((resp) => {
         this.isLoadingPlaces = false;
