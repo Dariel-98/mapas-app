@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Feature, PlacesResponse } from '../interfaces/places';
 import { PlacesApiClient } from '../api';
-import { MapService } from './map.service';
+import { MapService } from '.';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PlacesService {
   public userLocation?: [number, number];
+
   public isLoadingPlaces: boolean = false;
   public places: Feature[] = [];
 
@@ -49,13 +50,11 @@ export class PlacesService {
     this.isLoadingPlaces = true;
 
     this.placesApi
-      .get<PlacesResponse>(
-        `/${query}.json`
-        //   params: {
-        //     proximity: this.userLocation.join(','),
-        //   },
-        // }
-      )
+      .get<PlacesResponse>(`/${query}.json`, {
+        params: {
+          proximity: this.userLocation.join(','),
+        },
+      })
       .subscribe((resp) => {
         this.isLoadingPlaces = false;
         this.places = resp.features;
@@ -65,5 +64,9 @@ export class PlacesService {
           this.userLocation!
         );
       });
+  }
+
+  deletePlaces() {
+    this.places = [];
   }
 }
